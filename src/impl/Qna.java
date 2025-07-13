@@ -25,6 +25,7 @@ public class Qna {
             processInput(message);
         }
     }
+
     /**
      * Sets the private map container from outside Qna the class
      * 
@@ -81,7 +82,7 @@ public class Qna {
     public static boolean provideAnswers(String question) {
         List<String> answers = qnaStorage.get(question);
         if (answers == null) {
-            System.out.println("the answer to life, universe and everything is 42");
+            printAnswers(Arrays.asList("the answer to life, universe and everything is 42"));
             return false;
         } else {
             printAnswers(answers);
@@ -97,7 +98,7 @@ public class Qna {
      */
     public static void printAnswers(List<String> answers) {
         for (String answer : answers) {
-            System.out.println("\t" + answer);
+            System.out.println("\t" + '■' + " " + answer);
         }
     }
 
