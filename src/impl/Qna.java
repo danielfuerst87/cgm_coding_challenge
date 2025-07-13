@@ -22,7 +22,19 @@ public class Qna {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            processInput(message);
+
+            try {
+                if (inputSyntaxCorrect(message)) {
+                    processInput(message);
+                } else {
+                    // System.out.println("\nPlease check input syntax!");
+                    throw new ArrayIndexOutOfBoundsException("Odd number of \" detected!");
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+                System.out.println("\nPlease check input syntax!");
+
+            }
         }
     }
 
@@ -63,7 +75,8 @@ public class Qna {
      *                processed use case will be determined.
      */
     public static void processInput(String message) {
-        if (message.strip().endsWith("?")) {
+        message = message.strip();
+        if (message.endsWith("?")) {
             provideAnswers(message);
         } else {
             saveAnswersForQuestion(message);
@@ -142,6 +155,14 @@ public class Qna {
         if (string.length() > MAX_CHARS) {
             System.out.println(
                     name + " exceeded " + MAX_CHARS + " chars, please shorten it and try again.");
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean inputSyntaxCorrect(String message) {
+        long count = message.chars().filter(ch -> ch == '"').count();
+        if (count % 2 != 0) {
             return false;
         }
         return true;

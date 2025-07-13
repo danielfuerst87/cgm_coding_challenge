@@ -19,7 +19,7 @@ public class QnaTest {
     public void testStringTooLong() {
         // GIVEN
         String s = "";
-        for (int i = 0; i <= Qna.MAX_CHARS; i++) { //TODO: getter for the constant 
+        for (int i = 0; i <= Qna.MAX_CHARS; i++) { // TODO: getter for the constant
             s = s + "x";
         }
         // WHEN
@@ -95,12 +95,13 @@ public class QnaTest {
         Map<String, List<String>> map = new HashMap<>();
         map.put(message + " with some suffix?", new ArrayList<String>(Arrays.asList("a", "b")));
         Qna.setQnaStorage(map);
-        
+
         // WHEN
         Qna.provideAnswers(message);
 
         // // Capture and verify the output
-        String expectedOutput = "\t" + '■' + " the answer to life, universe and everything is 42" + System.lineSeparator();
+        String expectedOutput = "\t" + '■' + " the answer to life, universe and everything is 42"
+                + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
     }
 
@@ -118,15 +119,39 @@ public class QnaTest {
     }
 
     @Test
-    public void testprocessMessageSaveAnswers() {
+    public void testProcessMessageSaveAnswers() {
         // GIVEN
         String message = "Question ? \"answer 1\" \"answer 2\"";
 
         // WHEN
-        assertEquals(Qna.getQnaStorage().size(), 0);
+        int sizeBefore = Qna.getQnaStorage().size();
         Qna.processInput(message);
 
         // // Capture and verify the output
-        assertEquals(Qna.getQnaStorage().size(), 1);
+        assertEquals(Qna.getQnaStorage().size(), sizeBefore + 1);
+    }
+
+    @Test
+    public void testInputSyntaxCorrectProblem() {
+        // GIVEN
+        String message = "Question ? \"answer 1\"\" \"answer 2\"";
+
+        // WHEN
+        boolean inputOk = Qna.inputSyntaxCorrect(message);
+
+        // // Capture and verify the output
+        assertEquals(inputOk, false);
+    }
+
+    @Test
+    public void testInputSyntaxCorrectOk() {
+        // GIVEN
+        String message = "Question ? \"answer 1\" \"answer 2\"";
+
+        // WHEN
+        boolean inputOk = Qna.inputSyntaxCorrect(message);
+
+        // // Capture and verify the output
+        assertEquals(inputOk, true);
     }
 }
