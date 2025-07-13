@@ -25,11 +25,20 @@ public class Qna {
             processInput(message);
         }
     }
-
+    /**
+     * Sets the private map container from outside Qna the class
+     * 
+     * @param map container that is assigned to the private map inside the Qna class
+     */
     public static void setQnaStorage(Map<String, List<String>> map) {
         qnaStorage = map;
     }
 
+    /**
+     * Gets the value of the private map container from outside the Qna class
+     * 
+     * @return The value of the private map inside the Qna class
+     */
     public static Map<String, List<String>> getQnaStorage() {
         return qnaStorage;
     }
@@ -125,7 +134,8 @@ public class Qna {
      * 
      * @param string - the given string to check
      * @param name   - identifier to improve user feedback
-     * @return
+     * @return - "true" if given string length is below or equal MAX_CHARS
+     *         - "false" otherwise
      */
     public static boolean stringLengthOk(String string, String name) {
         if (string.length() > MAX_CHARS) {
