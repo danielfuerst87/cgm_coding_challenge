@@ -100,7 +100,7 @@ public class QnaTest {
         Qna.provideAnswers(message);
 
         // // Capture and verify the output
-        String expectedOutput = "the answer to life, universe and everything is 42" + System.lineSeparator();
+        String expectedOutput = "\t" + '■' + " the answer to life, universe and everything is 42" + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
     }
 
@@ -113,7 +113,7 @@ public class QnaTest {
         Qna.printAnswers(answers);
 
         // // Capture and verify the output
-        String expectedOutput = "\t1" + System.lineSeparator() + "\t2" + System.lineSeparator();
+        String expectedOutput = "\t" + '■' + " 1" + System.lineSeparator() + "\t" + '■' + " 2" + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
     }
 
