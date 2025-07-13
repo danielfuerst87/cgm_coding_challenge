@@ -26,9 +26,9 @@ What is Peters favorite food? “Pizza” “Spaghetti” “Ice cream”<br>
 - Asking a question which is in the system:<br>
 What is Peters favorite food?<br>
 Answers will be:<br>
-  * Pizza
-  * Spaghetti
-  * Ice cream
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ■ Pizza<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ■ Spaghetti<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ■ Ice cream
 - Asking a question which is not in the system:<br>
 When is Peters birthday?<br>
 Answer will be:<br>
