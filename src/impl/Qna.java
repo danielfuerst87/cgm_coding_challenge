@@ -26,10 +26,20 @@ public class Qna {
         }
     }
 
+    /**
+     * Sets the private map container from outside Qna the class
+     * 
+     * @param map container that is assigned to the private map inside the Qna class
+     */
     public static void setQnaStorage(Map<String, List<String>> map) {
         qnaStorage = map;
     }
 
+    /**
+     * Gets the value of the private map container from outside the Qna class
+     * 
+     * @return The value of the private map inside the Qna class
+     */
     public static Map<String, List<String>> getQnaStorage() {
         return qnaStorage;
     }
@@ -72,7 +82,7 @@ public class Qna {
     public static boolean provideAnswers(String question) {
         List<String> answers = qnaStorage.get(question);
         if (answers == null) {
-            System.out.println("the answer to life, universe and everything is 42");
+            printAnswers(Arrays.asList("the answer to life, universe and everything is 42"));
             return false;
         } else {
             printAnswers(answers);
@@ -88,7 +98,7 @@ public class Qna {
      */
     public static void printAnswers(List<String> answers) {
         for (String answer : answers) {
-            System.out.println("\t" + answer);
+            System.out.println("\t" + '■' + " " + answer);
         }
     }
 
@@ -125,7 +135,8 @@ public class Qna {
      * 
      * @param string - the given string to check
      * @param name   - identifier to improve user feedback
-     * @return
+     * @return - "true" if given string length is below or equal MAX_CHARS
+     *         - "false" otherwise
      */
     public static boolean stringLengthOk(String string, String name) {
         if (string.length() > MAX_CHARS) {
