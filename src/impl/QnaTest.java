@@ -15,15 +15,48 @@ import org.junit.Test;
 
 public class QnaTest {
 
+    Qna qna;
+
+    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+
+    @Before
+    public void setUp() {
+        qna = new Qna(); // fresh instance for each test
+        System.setOut(new PrintStream(outputStream)); // Redirect System.out to a ByteArrayOutputStream
+    }
+
+    @After
+    public void restoreSystemOut() {
+        System.setOut(originalOut); // Restore the original System.out after each test
+    }
+
+    @Test
+    public void testPrintlnOutputMissingQuestion() {
+        // GIVEN
+        String message = "Does this work";
+        Map<String, List<String>> map = new HashMap<>();
+        map.put(message + " with some suffix?", new ArrayList<String>(Arrays.asList("a", "b")));
+        qna.setQnaStorage(map);
+
+        // WHEN
+        qna.provideAnswers(message);
+
+        // // Capture and verify the output
+        String expectedOutput = "\t" + '■' + " the answer to life, universe and everything is 42"
+                + System.lineSeparator();
+        assertEquals(expectedOutput, outputStream.toString());
+    }
+
     @Test
     public void testStringTooLong() {
         // GIVEN
         String s = "";
-        for (int i = 0; i <= Qna.MAX_CHARS; i++) { // TODO: getter for the constant
+        for (int i = 0; i <= qna.getMaxChars(); i++) {
             s = s + "x";
         }
         // WHEN
-        boolean result = Qna.stringLengthOk(s, "Question");
+        boolean result = qna.stringLengthOk(s, "Question");
 
         // THEN --> expected state after execution
         Assert.assertFalse(result);
@@ -33,11 +66,12 @@ public class QnaTest {
     public void testStringLengthOk() {
         // GIVEN
         String s = "";
-        for (int i = 0; i < Qna.MAX_CHARS; i++) {
+        for (int i = 0; i < qna.getMaxChars(); i++) {
             s = s + "x";
         }
+
         // WHEN
-        boolean result = Qna.stringLengthOk(s, "Question");
+        boolean result = qna.stringLengthOk(s, "Question");
 
         // THEN --> expected state after execution
         Assert.assertTrue(result);
@@ -49,10 +83,10 @@ public class QnaTest {
         String message = "Does this work?";
         Map<String, List<String>> map = new HashMap<>();
         map.put(message, new ArrayList<>(Arrays.asList("a", "b", "c", "d")));
-        Qna.setQnaStorage(map);
+        qna.setQnaStorage(map);
 
         // WHEN
-        boolean answersFound = Qna.provideAnswers(message);
+        boolean answersFound = qna.provideAnswers(message);
 
         // THEN --> expected state after execution
         Assert.assertTrue(answersFound);
@@ -64,45 +98,13 @@ public class QnaTest {
         String message = "Does this also work";
         Map<String, List<String>> map = new HashMap<>();
         map.put(message + " with some suffix?", new ArrayList<String>(Arrays.asList("a", "b")));
-        Qna.setQnaStorage(map);
+        qna.setQnaStorage(map);
 
         // WHEN
-        boolean answersFound = Qna.provideAnswers(message);
+        boolean answersFound = qna.provideAnswers(message);
 
         // THEN --> expected state after execution
         Assert.assertFalse(answersFound);
-    }
-
-    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-
-    @Before
-    public void setUp() {
-        // Redirect System.out to a ByteArrayOutputStream
-        System.setOut(new PrintStream(outputStream));
-    }
-
-    @After
-    public void restoreSystemOut() {
-        // Restore the original System.out after each test
-        System.setOut(originalOut);
-    }
-
-    @Test
-    public void testPrintlnOutputMissingQuestion() {
-        // GIVEN
-        String message = "Does this work";
-        Map<String, List<String>> map = new HashMap<>();
-        map.put(message + " with some suffix?", new ArrayList<String>(Arrays.asList("a", "b")));
-        Qna.setQnaStorage(map);
-
-        // WHEN
-        Qna.provideAnswers(message);
-
-        // // Capture and verify the output
-        String expectedOutput = "\t" + '■' + " the answer to life, universe and everything is 42"
-                + System.lineSeparator();
-        assertEquals(expectedOutput, outputStream.toString());
     }
 
     @Test
@@ -111,7 +113,7 @@ public class QnaTest {
         List<String> answers = Arrays.asList("1", "2");
 
         // WHEN
-        Qna.printAnswers(answers);
+        qna.printAnswers(answers);
 
         // // Capture and verify the output
         String expectedOutput = "\t" + '■' + " 1" + System.lineSeparator() + "\t" + '■' + " 2" + System.lineSeparator();
@@ -124,11 +126,11 @@ public class QnaTest {
         String message = "Question ? \"answer 1\" \"answer 2\"";
 
         // WHEN
-        int sizeBefore = Qna.getQnaStorage().size();
-        Qna.processInput(message);
+        int sizeBefore = qna.getQnaStorage().size();
+        qna.processInput(message);
 
         // // Capture and verify the output
-        assertEquals(Qna.getQnaStorage().size(), sizeBefore + 1);
+        assertEquals(qna.getQnaStorage().size(), sizeBefore + 1);
     }
 
     @Test
@@ -137,7 +139,7 @@ public class QnaTest {
         String message = "Question ? \"answer 1\"\" \"answer 2\"";
 
         // WHEN
-        boolean inputOk = Qna.inputSyntaxCorrect(message);
+        boolean inputOk = Main.inputSyntaxCorrect(message);
 
         // // Capture and verify the output
         assertEquals(inputOk, false);
@@ -149,7 +151,7 @@ public class QnaTest {
         String message = "Question ? \"answer 1\" \"answer 2\"";
 
         // WHEN
-        boolean inputOk = Qna.inputSyntaxCorrect(message);
+        boolean inputOk = Main.inputSyntaxCorrect(message);
 
         // // Capture and verify the output
         assertEquals(inputOk, true);

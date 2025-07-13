@@ -9,33 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 public class Qna {
-    public static final int MAX_CHARS = 255;
-    private static Map<String, List<String>> qnaStorage = new HashMap<>();
+    private static final int MAX_CHARS = 255;
+    private Map<String, List<String>> qnaStorage = new HashMap<>();
 
-    public static void main(String[] args) {
-
-        while (true) {
-            System.out.println("\nPlease ask a question or provide answers to a question.");
-            String message = "";
-            try {
-                message = readInputFromSystemIn();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                if (inputSyntaxCorrect(message)) {
-                    processInput(message);
-                } else {
-                    // System.out.println("\nPlease check input syntax!");
-                    throw new ArrayIndexOutOfBoundsException("Odd number of \" detected!");
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                e.printStackTrace();
-                System.out.println("\nPlease check input syntax!");
-
-            }
-        }
+    /**
+     * Gets the value the private constant MAX_CHARS
+     * 
+     * @return The value of the private constant MAX_CHARS from inside Qna class
+     */
+    public int getMaxChars() {
+        return MAX_CHARS;
     }
 
     /**
@@ -43,7 +26,7 @@ public class Qna {
      * 
      * @param map container that is assigned to the private map inside the Qna class
      */
-    public static void setQnaStorage(Map<String, List<String>> map) {
+    public void setQnaStorage(Map<String, List<String>> map) {
         qnaStorage = map;
     }
 
@@ -52,19 +35,8 @@ public class Qna {
      * 
      * @return The value of the private map inside the Qna class
      */
-    public static Map<String, List<String>> getQnaStorage() {
+    public Map<String, List<String>> getQnaStorage() {
         return qnaStorage;
-    }
-
-    /**
-     * Read input from System.In
-     * 
-     * @return String that contains the data entered by the user
-     * @throws IOException - if the given data could not be handeled
-     */
-    public static String readInputFromSystemIn() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        return reader.readLine();
     }
 
     /***
@@ -74,7 +46,7 @@ public class Qna {
      * @param message - the given user input data. In dependency of the content the
      *                processed use case will be determined.
      */
-    public static void processInput(String message) {
+    public void processInput(String message) {
         message = message.strip();
         if (message.endsWith("?")) {
             provideAnswers(message);
@@ -92,7 +64,7 @@ public class Qna {
      * @return - "true" if answers where found for the given question
      *         - "false" otherwise
      */
-    public static boolean provideAnswers(String question) {
+    public boolean provideAnswers(String question) {
         List<String> answers = qnaStorage.get(question);
         if (answers == null) {
             printAnswers(Arrays.asList("the answer to life, universe and everything is 42"));
@@ -109,7 +81,7 @@ public class Qna {
      * @param answers - List of answer strings that need to be printed in a formated
      *                way
      */
-    public static void printAnswers(List<String> answers) {
+    public void printAnswers(List<String> answers) {
         for (String answer : answers) {
             System.out.println("\t" + '■' + " " + answer);
         }
@@ -124,7 +96,7 @@ public class Qna {
      * @param message - the user input data string containing a question and one or
      *                more answers.
      */
-    public static void saveAnswersForQuestion(String message) {
+    public void saveAnswersForQuestion(String message) {
         String[] splitMessage = message.split("\\? ");
         String question = splitMessage[0] + "?";
         if (!stringLengthOk(question, "Question")) {
@@ -151,18 +123,10 @@ public class Qna {
      * @return - "true" if given string length is below or equal MAX_CHARS
      *         - "false" otherwise
      */
-    public static boolean stringLengthOk(String string, String name) {
+    public boolean stringLengthOk(String string, String name) {
         if (string.length() > MAX_CHARS) {
             System.out.println(
                     name + " exceeded " + MAX_CHARS + " chars, please shorten it and try again.");
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean inputSyntaxCorrect(String message) {
-        long count = message.chars().filter(ch -> ch == '"').count();
-        if (count % 2 != 0) {
             return false;
         }
         return true;
